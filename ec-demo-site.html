@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オンラインショップ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2.5em;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        #searchButton {
+            padding: 15px 40px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #searchButton:hover {
+            background: #5568d3;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .product-name {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .product-price {
+            font-size: 1.4em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background: #764ba2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #653a8a;
+        }
+
+        .no-results {
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+            margin-top: 50px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛍️ オンラインショップ</h1>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="商品を検索...">
+                <button id="searchButton">検索</button>
+            </div>
+        </header>
+
+        <div id="productsContainer" class="products"></div>
+        <div id="noResults" class="no-results hidden">
+            検索結果が見つかりませんでした
+        </div>
+    </div>
+
+    <script>
+        const products = {
+            halloween: [
+                { id: 1, name: 'ハロウィンかぼちゃランタン', price: '¥2,980', emoji: '🎃' },
+                { id: 2, name: 'コウモリの壁飾り', price: '¥1,580', emoji: '🦇' },
+                { id: 3, name: 'おばけのぬいぐるみ', price: '¥3,200', emoji: '👻' },
+                { id: 4, name: '魔女の帽子', price: '¥2,500', emoji: '🧙‍♀️' },
+                { id: 5, name: 'ハロウィンキャンディセット', price: '¥1,800', emoji: '🍬' },
+                { id: 6, name: 'ドクロの装飾品', price: '¥2,200', emoji: '💀' }
+            ]
+        };
+
+        const productsContainer = document.getElementById('productsContainer');
+        const noResults = document.getElementById('noResults');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+
+        function displayProducts(productList) {
+            productsContainer.innerHTML = '';
+            
+            if (productList.length === 0) {
+                productsContainer.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            productsContainer.classList.remove('hidden');
+            noResults.classList.add('hidden');
+
+            productList.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-image">${product.emoji}</div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">${product.price}</div>
+                    <button class="add-to-cart" onclick="addToCart('${product.name}')">カートに追加</button>
+                `;
+                productsContainer.appendChild(card);
+            });
+        }
+
+        function searchProducts() {
+            const query = searchInput.value.toLowerCase().trim();
+            
+            if (query.includes('クリスマス') || query.includes('xmas') || query.includes('christmas')) {
+                displayProducts(products.halloween);
+            } else if (query.includes('ハロウィン') || query.includes('halloween')) {
+                displayProducts(products.halloween);
+            } else if (query === '') {
+                productsContainer.innerHTML = '';
+                productsContainer.classList.add('hidden');
+                noResults.classList.add('hidden');
+            } else {
+                displayProducts([]);
+            }
+        }
+
+        function addToCart(productName) {
+            alert(`「${productName}」をカートに追加しました！`);
+        }
+
+        searchButton.addEventListener('click', searchProducts);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchProducts();
+            }
+        });
+    </script>
+</body>
+</html>
