@@ -151,7 +151,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>🛍️ オンラインショップ</h1>
+            <h1> オンラインショップ</h1>
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="商品を検索...">
                 <button id="searchButton">検索</button>
@@ -164,17 +164,19 @@
         </div>
     </div>
 
-    <script>
-        const products = {
-            halloween: [
-                { id: 1, name: 'ハロウィンかぼちゃランタン', price: '¥2,980', emoji: '🎃' },
-                { id: 2, name: 'コウモリの壁飾り', price: '¥1,580', emoji: '🦇' },
-                { id: 3, name: 'おばけのぬいぐるみ', price: '¥3,200', emoji: '👻' },
-                { id: 4, name: '魔女の帽子', price: '¥2,500', emoji: '🧙‍♀️' },
-                { id: 5, name: 'ハロウィンキャンディセット', price: '¥1,800', emoji: '🍬' },
-                { id: 6, name: 'ドクロの装飾品', price: '¥2,200', emoji: '💀' }
-            ]
-        };
+<script>
+    const products = {
+        halloween: [
+            { id: 1, name: 'ハロウィンかぼちゃランタン', price: '¥2,980', emoji: 'images/pumpkin.png' },
+            { id: 2, name: 'コウモリの壁飾り', price: '¥1,580', emoji: 'images/bat.png' },
+            { id: 3, name: 'おばけのぬいぐるみ', price: '¥3,200', emoji: 'images/ghost.png' },
+            { id: 4, name: '魔女の帽子', price: '¥2,500', emoji: 'images/witch.png' },
+            { id: 5, name: 'ハロウィンキャンディセット', price: '¥1,800', emoji: 'images/candy.png' },
+            { id: 6, name: 'ドクロの装飾品', price: '¥2,200', emoji: 'images/skull.png' }
+        ]
+    };
+</script>
+
 
         const productsContainer = document.getElementById('productsContainer');
         const noResults = document.getElementById('noResults');
