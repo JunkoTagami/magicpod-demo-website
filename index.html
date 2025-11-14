@@ -168,14 +168,84 @@
     const products = {
         halloween: [
             { id: 1, name: 'ハロウィンかぼちゃランタン', price: '¥2,980', emoji: 'images/pumpkin.png' },
-            { id: 2, name: 'コウモリの壁飾り', price: '¥1,580', emoji: 'images/bat.png' },
-            { id: 3, name: 'おばけのぬいぐるみ', price: '¥3,200', emoji: 'images/ghost.png' },
-            { id: 4, name: '魔女の帽子', price: '¥2,500', emoji: 'images/witch.png' },
+            { id: 2, name: 'コウモリの壁飾り',          price: '¥1,580', emoji: 'images/bat.png' },
+            { id: 3, name: 'おばけのぬいぐるみ',        price: '¥3,200', emoji: 'images/ghost.png' },
+            { id: 4, name: '魔女の帽子',                price: '¥2,500', emoji: 'images/witch.png' },
             { id: 5, name: 'ハロウィンキャンディセット', price: '¥1,800', emoji: 'images/candy.png' },
-            { id: 6, name: 'ドクロの装飾品', price: '¥2,200', emoji: 'images/skull.png' }
+            { id: 6, name: 'ドクロの装飾品',            price: '¥2,200', emoji: 'images/skull.png' }
         ]
     };
+
+    const productsContainer = document.getElementById('productsContainer');
+    const noResults         = document.getElementById('noResults');
+    const searchInput       = document.getElementById('searchInput');
+    const searchButton      = document.getElementById('searchButton');
+
+    function displayProducts(productList) {
+        productsContainer.innerHTML = '';
+
+        if (productList.length === 0) {
+            productsContainer.classList.add('hidden');
+            noResults.classList.remove('hidden');
+            return;
+        }
+
+        productsContainer.classList.remove('hidden');
+        noResults.classList.add('hidden');
+
+        productList.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="product-icon">
+                    <img src="${product.emoji}" alt="${product.name}">
+                </div>
+                <div class="product-name">${product.name}</div>
+                <div class="product-price">${product.price}</div>
+                <button class="add-to-cart" onclick="addToCart('${product.name}')">
+                    カートに追加
+                </button>
+            `;
+            productsContainer.appendChild(card);
+        });
+    }
+
+    function searchProducts() {
+        const query = searchInput.value.toLowerCase().trim();
+
+        if (
+            query.includes('クリスマス') ||
+            query.includes('xmas') ||
+            query.includes('christmas')
+        ) {
+            // クリスマス商品があればここで表示
+            displayProducts([]); // とりあえず空
+        } else if (
+            query.includes('ハロウィン') ||
+            query.includes('halloween')
+        ) {
+            displayProducts(products.halloween);
+        } else if (query === '') {
+            productsContainer.innerHTML = '';
+            productsContainer.classList.add('hidden');
+            noResults.classList.add('hidden');
+        } else {
+            displayProducts([]);
+        }
+    }
+
+    function addToCart(productName) {
+        alert(`「${productName}」をカートに追加しました！`);
+    }
+
+    searchButton.addEventListener('click', searchProducts);
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchProducts();
+        }
+    });
 </script>
+
 
 
         const productsContainer = document.getElementById('productsContainer');
