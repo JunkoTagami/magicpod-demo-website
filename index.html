@@ -30,7 +30,7 @@
     }
 
     .search-box {
-      margin: 0 auto;
+      margin: 0 auto 24px;
       background: rgba(255, 255, 255, 0.95);
       border-radius: 999px;
       width: 90%;
@@ -59,13 +59,20 @@
       border-radius: 999px;
       background: #8e44ad;
       color: #fff;
-      cursor: default; /* デモなのでクリック不可でOK */
+      cursor: pointer;
     }
 
     .product-section {
       padding: 24px 16px 40px;
       max-width: 1000px;
       margin: 0 auto;
+      transition: opacity 0.3s ease;
+    }
+
+    /* 最初は商品エリアを非表示にする */
+    .hidden-section {
+      display: none;
+      opacity: 0;
     }
 
     .section-title {
@@ -142,11 +149,15 @@
   <p class="sub">デモ用サイト（MagicPod 動作確認用）</p>
 
   <div class="search-box">
-    <input type="text" placeholder="例）ハロウィンランタン、キャンディ、魔女の帽子…">
-    <button>検索（デモ）</button>
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="例）ハロウィンランタン、キャンディ、魔女の帽子…">
+    <button id="searchButton">検索（デモ）</button>
   </div>
 
-  <main class="product-section">
+  <!-- 最初は非表示にしておく -->
+  <main id="productSection" class="product-section hidden-section">
     <h2 class="section-title">🎃 ハロウィンおすすめ商品</h2>
 
     <div class="product-grid">
@@ -198,9 +209,9 @@
 
       <div class="product-card">
         <div class="product-icon">
-          <img src="images/spider-web.png" alt="蜘蛛の巣の装飾品">
+          <img src="images/skull.png" alt="ドクロの装飾品">
         </div>
-        <div class="product-name">ドクロの装飾品</div>
+        <div class="product-name">蜘蛛の巣の装飾品</div>
         <div class="product-price">¥2,200</div>
         <button class="add-to-cart">カートに追加</button>
       </div>
@@ -209,6 +220,31 @@
   </main>
 
   <p class="footer-note">※ 本ページはデモ用の架空オンラインショップです。</p>
+
+  <!-- 商品エリアを表示させるだけの超シンプルなJS -->
+  <script>
+    const searchButton   = document.getElementById('searchButton');
+    const searchInput    = document.getElementById('searchInput');
+    const productSection = document.getElementById('productSection');
+
+    function showProducts() {
+      // すでに表示済みなら何もしない
+      if (!productSection.classList.contains('hidden-section')) return;
+
+      productSection.classList.remove('hidden-section');
+      // 画面を商品エリアまでスクロール（動画映え用）
+      productSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    searchButton.addEventListener('click', showProducts);
+
+    // Enterキーでも商品表示
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        showProducts();
+      }
+    });
+  </script>
 
 </body>
 </html>
